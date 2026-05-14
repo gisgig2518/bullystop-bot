@@ -30,8 +30,28 @@ app.post('/webhook', line.middleware(config), async (req, res) => {
   }
 });
 
-// ---- Health check ----
-app.get('/', (req, res) => res.send('BullyStop Bot is running!'));
+// ---- Health check (สำหรับ UptimeRobot ping) ----
+app.get('/', (req, res) => res.send('BullyStop Bot is running! ✅'));
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'ok',
+    service: 'BullyStop Bot',
+    timestamp: new Date().toISOString(),
+  });
+});
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`✅ Server running on port ${PORT}`);
+
+  // ---- Self-ping ทุก 14 นาที ป้องกัน Render Sleep ----
+  const https = require('https');
+  const SELF_URL = process.env.RENDER_EXTERNAL_URL || 'https://bullystop-bot.onrender.com';
+  setInterval(() => {
+    https.get(`${SELF_URL}/health`, (res) => {
+      console.log(`🏓 Self-ping: ${res.statusCode} — ${new Date().toLocaleTimeString('th-TH')}`);
+    }).on('error', (err) => {
+      console.error('Self-ping error:', err.message);
+    });
+  }, 14 * 60 * 1000); // 14 นาที
+});
