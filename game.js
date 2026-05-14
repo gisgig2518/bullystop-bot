@@ -1,8 +1,8 @@
 // ============================================================
 //  game.js — ข้อมูลการ์ดและ Logic เกม BullyStop
+//  Pre/Post-test: ตอบถูก = 1 คะแนน / ตอบผิด = 0 คะแนน (เต็ม 5)
 // ============================================================
 
-// ---- ข้อมูลการ์ดบูลลี่ตัวอย่าง 10 ใบ (เพิ่มเองได้ครบ 20 ใบ) ----
 const BULLY_CARDS = [
   {
     id: 'B01', type: 'verbal', typeLabel: 'ทางวาจา',
@@ -60,7 +60,7 @@ const BULLY_CARDS = [
       { key: 'A', text: 'ขอให้ลบรูปพร้อมแจ้งว่าไม่ยินยอม', score: 3 },
       { key: 'B', text: 'ออกจากกลุ่มทันที', score: 1 },
       { key: 'C', text: 'ส่งรูปอับอายของคนนั้นคืน', score: 0 },
-      { key: 'D', text: 'แจ้ง LINE ว่าเนื้อหานั้นละเมิดความเป็นส่วนตัว', score: 2 },
+      { key: 'D', text: 'แจ้ง LINE ว่าเนื้อหาละเมิดความเป็นส่วนตัว', score: 2 },
     ],
     explain: 'การขอให้ลบและแจ้งอย่างชัดเจนว่าไม่ยินยอมคือการปกป้องสิทธิ์ตนเองอย่างตรงไปตรงมา',
   },
@@ -74,7 +74,7 @@ const BULLY_CARDS = [
       { key: 'C', text: 'ขอพูดคุยส่วนตัวกับคนที่นินทา', score: 3 },
       { key: 'D', text: 'นินทาคืนกลับ', score: 0 },
     ],
-    explain: 'การขอพูดคุยส่วนตัวช่วยลดความขัดแย้งและเปิดโอกาสให้แก้ไขความเข้าใจผิดได้ดีที่สุด',
+    explain: 'การขอพูดคุยส่วนตัวช่วยลดความขัดแย้งและเปิดโอกาสแก้ไขความเข้าใจผิดได้ดีที่สุด',
   },
   {
     id: 'B07', type: 'physical', typeLabel: 'ทางร่างกาย',
@@ -126,16 +126,17 @@ const BULLY_CARDS = [
   },
 ];
 
-// ---- แบบทดสอบ Pre/Post test 5 ข้อ ----
+// ---- Pre/Post-test 5 ข้อ ----
+// ตอบถูก = 1 คะแนน / ตอบผิด = 0 คะแนน / คะแนนเต็ม = 5
 const TEST_QUESTIONS = [
   {
     id: 'T01',
     text: 'ถ้าเพื่อนล้อเลียนคุณต่อหน้าคนอื่น สิ่งแรกที่ควรทำคืออะไร?',
     choices: [
-      { key: 'A', text: 'โต้ตอบกลับทันที', score: 0 },
-      { key: 'B', text: 'บอกตรงๆ ว่าคำพูดนั้นทำให้เจ็บปวด', score: 3 },
-      { key: 'C', text: 'เดินออกไปเฉยๆ', score: 1 },
-      { key: 'D', text: 'ร้องไห้', score: 0 },
+      { key: 'A', text: 'โต้ตอบกลับทันที' },
+      { key: 'B', text: 'บอกตรงๆ ว่าคำพูดนั้นทำให้เจ็บปวด' },
+      { key: 'C', text: 'เดินออกไปเฉยๆ' },
+      { key: 'D', text: 'ร้องไห้' },
     ],
     correctKey: 'B',
   },
@@ -143,10 +144,10 @@ const TEST_QUESTIONS = [
     id: 'T02',
     text: 'การเป็น Upstander หมายความว่าอะไร?',
     choices: [
-      { key: 'A', text: 'ยืนดูเฉยๆ เมื่อเห็นการบูลลี่', score: 0 },
-      { key: 'B', text: 'เข้าร่วมการล้อเลียนด้วย', score: 0 },
-      { key: 'C', text: 'กล้าพูดหรือแจ้งผู้ใหญ่เมื่อเห็นการบูลลี่', score: 3 },
-      { key: 'D', text: 'หลีกเลี่ยงสถานการณ์', score: 1 },
+      { key: 'A', text: 'ยืนดูเฉยๆ เมื่อเห็นการบูลลี่' },
+      { key: 'B', text: 'เข้าร่วมการล้อเลียนด้วย' },
+      { key: 'C', text: 'กล้าพูดหรือแจ้งผู้ใหญ่เมื่อเห็นการบูลลี่' },
+      { key: 'D', text: 'หลีกเลี่ยงสถานการณ์' },
     ],
     correctKey: 'C',
   },
@@ -154,10 +155,10 @@ const TEST_QUESTIONS = [
     id: 'T03',
     text: 'ถ้าถูกส่งรูปอับอายในกลุ่ม LINE สิ่งแรกที่ควรทำคืออะไร?',
     choices: [
-      { key: 'A', text: 'ส่งรูปอับอายของคนนั้นคืน', score: 0 },
-      { key: 'B', text: 'ออกจากกลุ่มทันที', score: 1 },
-      { key: 'C', text: 'ขอให้ลบรูปและแจ้งว่าไม่ยินยอม', score: 3 },
-      { key: 'D', text: 'เพิกเฉย', score: 0 },
+      { key: 'A', text: 'ส่งรูปอับอายของคนนั้นคืน' },
+      { key: 'B', text: 'ออกจากกลุ่มทันที' },
+      { key: 'C', text: 'ขอให้ลบรูปและแจ้งว่าไม่ยินยอม' },
+      { key: 'D', text: 'เพิกเฉย' },
     ],
     correctKey: 'C',
   },
@@ -165,10 +166,10 @@ const TEST_QUESTIONS = [
     id: 'T04',
     text: 'การขอความช่วยเหลือจากครูเมื่อถูกบูลลี่คืออะไร?',
     choices: [
-      { key: 'A', text: 'ความอ่อนแอ', score: 0 },
-      { key: 'B', text: 'ความขี้ขลาด', score: 0 },
-      { key: 'C', text: 'ความกล้าหาญและการแก้ปัญหาที่ถูกต้อง', score: 3 },
-      { key: 'D', text: 'การทำให้ปัญหาใหญ่ขึ้น', score: 0 },
+      { key: 'A', text: 'ความอ่อนแอ' },
+      { key: 'B', text: 'ความขี้ขลาด' },
+      { key: 'C', text: 'ความกล้าหาญและการแก้ปัญหาที่ถูกต้อง' },
+      { key: 'D', text: 'การทำให้ปัญหาใหญ่ขึ้น' },
     ],
     correctKey: 'C',
   },
@@ -176,10 +177,10 @@ const TEST_QUESTIONS = [
     id: 'T05',
     text: 'ถ้าเพื่อนบังคับให้คุณเลือกข้าง คุณควรทำอย่างไร?',
     choices: [
-      { key: 'A', text: 'เลือกกลุ่มที่ใหญ่กว่า', score: 0 },
-      { key: 'B', text: 'ยอมตามเพื่อไม่ให้ถูกกีดกัน', score: 0 },
-      { key: 'C', text: 'บอกว่าคุณไม่ยอมให้ใครบังคับเรื่องมิตรภาพ', score: 3 },
-      { key: 'D', text: 'เงียบและทำตาม', score: 0 },
+      { key: 'A', text: 'เลือกกลุ่มที่ใหญ่กว่า' },
+      { key: 'B', text: 'ยอมตามเพื่อไม่ให้ถูกกีดกัน' },
+      { key: 'C', text: 'บอกว่าคุณไม่ยอมให้ใครบังคับเรื่องมิตรภาพ' },
+      { key: 'D', text: 'เงียบและทำตาม' },
     ],
     correctKey: 'C',
   },
@@ -199,14 +200,10 @@ function checkAnswer(cardId, choiceKey) {
   const choice = card.choices.find(c => c.key === choiceKey);
   const score  = choice ? choice.score : 0;
   const best   = card.choices.reduce((a, b) => a.score > b.score ? a : b);
-
   return {
-    card,
-    selected: choice,
-    score,
+    card, selected: choice, score,
     isCorrect: choice && choice.key === best.key,
-    bestChoice: best,
-    explain: card.explain,
+    bestChoice: best, explain: card.explain,
   };
 }
 
@@ -214,14 +211,19 @@ function getPretestQuestion(index) {
   return TEST_QUESTIONS[index % TEST_QUESTIONS.length];
 }
 
+// ตอบถูก = 1 คะแนน / ตอบผิด = 0 คะแนน / เต็ม 5
 function scorePre(answers) {
   let total = 0;
   answers.forEach(a => {
-    const q      = TEST_QUESTIONS.find(q => q.id === a.q);
-    const choice = q && q.choices.find(c => c.key === a.a);
-    if (choice) total += choice.score;
+    const q = TEST_QUESTIONS.find(q => q.id === a.q);
+    if (q && a.a === q.correctKey) total += 1;
   });
   return total;
 }
 
-module.exports = { getRandomCard, getCardById, checkAnswer, getPretestQuestion, scorePre, BULLY_CARDS, TEST_QUESTIONS };
+module.exports = {
+  getRandomCard, getCardById, checkAnswer,
+  getPretestQuestion, scorePre,
+  BULLY_CARDS, TEST_QUESTIONS,
+  MAX_TEST_SCORE: 5,
+};
