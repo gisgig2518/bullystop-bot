@@ -93,7 +93,7 @@ function pretestIntro() {
       type:'bubble',
       header:{ type:'box', layout:'vertical', backgroundColor:'#7c4dff', paddingAll:'16px', contents:[
         { type:'text', text:'แบบทดสอบก่อนเรียน 📝', color:'#ffffff', weight:'bold', size:'lg' },
-        { type:'text', text:'Pre-test | 5 ข้อ | ~3-5 นาที', color:'#ccbbff', size:'xs' },
+        { type:'text', text:'Pre-test | 10 ข้อ | ~5-8 นาที', color:'#ccbbff', size:'xs' },
       ]},
       body:{ type:'box', layout:'vertical', spacing:'sm', paddingAll:'16px', contents:[
         { type:'text', text:'ก่อนเริ่มเกม เราทำแบบทดสอบสั้นๆ กันก่อนนะครับ', wrap:true, size:'sm', color:'#555555' },
@@ -110,7 +110,7 @@ function pretestIntro() {
 function pretestQuestion(q, num, isPost = false) {
   const prefix = isPost ? 'posttest_answer' : 'pretest_answer';
   const color  = isPost ? '#06C755' : '#7c4dff';
-  const label  = isPost ? `Post-test ข้อ ${num}/5` : `Pre-test ข้อ ${num}/5`;
+  const label  = isPost ? `Post-test ข้อ ${num}/10` : `Pre-test ข้อ ${num}/10`;
   return {
     type:'flex', altText:`${label}: ${q.text}`,
     contents:{
