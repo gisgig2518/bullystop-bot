@@ -66,7 +66,7 @@ async function handlePostback(action, value, cardId, state, userId, replyToken, 
     if (!userState[userId].pretestAnswers) userState[userId].pretestAnswers = [];
     userState[userId].pretestAnswers.push({ q: cardId, a: value });
     const total = userState[userId].pretestAnswers.length;
-    if (total < 5) return client.replyMessage(replyToken, flex.pretestQuestion(game.getPretestQuestion(total), total + 1));
+    if (total < 10) return client.replyMessage(replyToken, flex.pretestQuestion(game.getPretestQuestion(total), total + 1));
     const score = game.scorePre(userState[userId].pretestAnswers);
     userState[userId].pretest = score;
     await sheets.logPretest(userId, score);
@@ -81,7 +81,7 @@ async function handlePostback(action, value, cardId, state, userId, replyToken, 
   if (action === 'posttest') {
     userState[userId].posttestAnswers = [];
     return client.replyMessage(replyToken, [
-      { type: 'text', text: 'เย่! เล่นครบแล้ว 🎉 มาทำ Post-test กันเถอะ มี 5 ข้อเหมือนเดิมเลยครับ' },
+      { type: 'text', text: 'เย่! เล่นครบแล้ว 🎉 มาทำ Post-test กันเถอะ มี 10 ข้อเหมือนเดิมเลยครับ' },
       flex.pretestQuestion(game.getPretestQuestion(0), 1, true),
     ]);
   }
@@ -89,7 +89,7 @@ async function handlePostback(action, value, cardId, state, userId, replyToken, 
     if (!userState[userId].posttestAnswers) userState[userId].posttestAnswers = [];
     userState[userId].posttestAnswers.push({ q: cardId, a: value });
     const total = userState[userId].posttestAnswers.length;
-    if (total < 5) return client.replyMessage(replyToken, flex.pretestQuestion(game.getPretestQuestion(total), total + 1, true));
+    if (total < 10) return client.replyMessage(replyToken, flex.pretestQuestion(game.getPretestQuestion(total), total + 1, true));
     const post = game.scorePre(userState[userId].posttestAnswers);
     const pre  = userState[userId].pretest || 0;
     await sheets.logPosttest(userId, post);
