@@ -132,7 +132,7 @@ function pretestQuestion(q, num, isPost = false) {
 }
 
 function pretestResult(score) {
-  const max  = 5;
+  const max  = 10;
   const pct  = Math.round((score / max) * 100);
   let level  = 'ต้องพัฒนาต่อนะครับ';
   let color  = '#E24B4A';
@@ -157,7 +157,7 @@ function pretestResult(score) {
 }
 
 function finalReport(pre, post, gameScore) {
-  const max    = 5;
+  const max    = 10;
   const diff   = post - pre;
   const diffStr = diff >= 0 ? `+${diff}` : `${diff}`;
   const color  = diff >= 0 ? '#1D9E75' : '#E24B4A';
