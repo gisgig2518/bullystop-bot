@@ -32,6 +32,10 @@ async function routeText(text, state, userId, replyToken, client) {
   const t = text.toLowerCase();
   if (t.includes('เริ่มเล่น') || t === 'เริ่ม' || t === 'start') {
     userState[userId].phase = 'pretest';
+    userState[userId].pretestAnswers  = [];
+    userState[userId].posttestAnswers = [];
+    userState[userId].pretest         = null;
+    userState[userId].score           = 0;
     return client.replyMessage(replyToken, flex.pretestIntro());
   }
   if (t.includes('วิธีเล่น') || t.includes('help')) {
