@@ -101,7 +101,7 @@ function pretestIntro() {
         { type:'text', text:'ผลจะถูกบันทึกเพื่อวัดพัฒนาการหลังเล่นเกมครับ', wrap:true, size:'xs', color:'#888888' },
       ]},
       footer:{ type:'box', layout:'vertical', contents:[
-        { type:'button', action:{ type:'postback', label:'📝 เริ่มทำแบบทดสอบ', data:'action=pretest_answer&card=T01&value=START' }, style:'primary', color:'#7c4dff' },
+        { type:'button', action:{ type:'postback', label:'📝 เริ่มทำแบบทดสอบ', data:'action=start_pretest' }, style:'primary', color:'#7c4dff' },
       ]},
     },
   };
