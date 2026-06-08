@@ -66,6 +66,10 @@ async function handlePostback(action, value, cardId, state, userId, replyToken, 
   if (action === 'next_card') {
     return client.replyMessage(replyToken, flex.bullyCard(game.getRandomCard()));
   }
+  if (action === 'start_pretest') {
+    userState[userId].pretestAnswers = [];
+    return client.replyMessage(replyToken, flex.pretestQuestion(game.getPretestQuestion(0), 1));
+  }
   if (action === 'pretest_answer') {
     if (!userState[userId].pretestAnswers) userState[userId].pretestAnswers = [];
     userState[userId].pretestAnswers.push({ q: cardId, a: value });
