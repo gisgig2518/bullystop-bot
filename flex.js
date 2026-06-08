@@ -29,7 +29,7 @@ function bullyCard(card) {
         ...card.choices.map(ch => ({
           type:'button',
           action:{ type:'postback', label:`${ch.key}. ${ch.text.substring(0,28)}`, data:`action=answer&card=${card.id}&value=${ch.key}` },
-          style:'secondary', height:'sm', margin:'xs',
+          style:'secondary', height:'sm', margin:'xs', adjustMode:'shrink-to-fit',
         })),
       ]},
       footer:{ type:'box', layout:'horizontal', contents:[
@@ -119,12 +119,17 @@ function pretestQuestion(q, num, isPost = false) {
         { type:'text', text:label, color:'#ffffff', size:'xs', weight:'bold' },
       ]},
       body:{ type:'box', layout:'vertical', spacing:'md', paddingAll:'16px', contents:[
-        { type:'text', text:q.text, wrap:true, weight:'bold', size:'md' },
+        { type:'text', text:q.text, wrap:true, weight:'bold', size:'sm' },
         { type:'separator' },
         ...q.choices.map(c => ({
-          type:'button',
-          action:{ type:'postback', label:`${c.key}. ${c.text.substring(0,30)}`, data:`action=${prefix}&card=${q.id}&value=${c.key}` },
-          style:'secondary', height:'sm', margin:'xs',
+          type:'box', layout:'horizontal', margin:'xs',
+          borderColor:'#CCCCCC', borderWidth:'1px', cornerRadius:'8px',
+          paddingAll:'10px', spacing:'sm',
+          action:{ type:'postback', data:`action=${prefix}&card=${q.id}&value=${c.key}` },
+          contents:[
+            { type:'text', text:c.key+'.', size:'sm', weight:'bold', flex:0, color:'#3C3489' },
+            { type:'text', text:c.text, size:'sm', wrap:true, flex:1, color:'#333333' },
+          ],
         })),
       ]},
     },
