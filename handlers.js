@@ -7,22 +7,46 @@ const ai     = require('./ai');
 
 const userState = {};
 
+// ── getState: คืนค่า state ที่สะอาดเสมอ ป้องกัน state เพี้ยนหลัง Bot restart ──
+function getState(userId) {
+  const s = userState[userId];
+  if (!s || typeof s !== 'object') {
+    userState[userId] = freshState();
+    return userState[userId];
+  }
+  // ถ้า pretestAnswers หรือ posttestAnswers ไม่ใช่ array ให้ reset
+  if (!Array.isArray(s.pretestAnswers))  s.pretestAnswers  = [];
+  if (!Array.isArray(s.posttestAnswers)) s.posttestAnswers = [];
+  if (typeof s.score !== 'number')       s.score           = 0;
+  return s;
+}
+
+function freshState() {
+  return {
+    phase:            'welcome',
+    score:            0,
+    pretest:          null,
+    pretestAnswers:   [],
+    posttestAnswers:  [],
+  };
+}
+
 async function handleEvent(event, client) {
   const userId = event.source.userId;
   if (event.type === 'follow') {
-    userState[userId] = { phase: 'welcome', score: 0, pretest: null };
+    userState[userId] = freshState();
     await sheets.logAction(userId, 'follow', '-');
     return client.replyMessage(event.replyToken, msgWelcome());
   }
   if (event.type === 'message' && event.message.type === 'text') {
     const text  = event.message.text.trim();
-    const state = userState[userId] || { phase: 'welcome', score: 0 };
+    const state = getState(userId);
     userState[userId] = state;
     return routeText(text, state, userId, event.replyToken, client);
   }
   if (event.type === 'postback') {
     const data   = new URLSearchParams(event.postback.data);
-    const state  = userState[userId] || { phase: 'game', score: 0 };
+    const state  = getState(userId);
     userState[userId] = state;
     return handlePostback(data.get('action'), data.get('value'), data.get('card'), state, userId, event.replyToken, client);
   }
@@ -30,6 +54,13 @@ async function handleEvent(event, client) {
 
 async function routeText(text, state, userId, replyToken, client) {
   const t = text.toLowerCase();
+  if (t.includes('รีเซ็ต') || t.includes('reset') || t.includes('เริ่มใหม่')) {
+    userState[userId] = freshState();
+    return client.replyMessage(replyToken, [
+      { type:'text', text:'รีเซ็ตเรียบร้อยแล้วครับ 🔄 พร้อมเริ่มใหม่ได้เลย!' },
+      msgWelcome(),
+    ]);
+  }
   if (t.includes('เริ่มเล่น') || t === 'เริ่ม' || t === 'start') {
     userState[userId].phase = 'pretest';
     userState[userId].pretestAnswers  = [];
