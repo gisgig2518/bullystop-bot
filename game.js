@@ -242,8 +242,25 @@ const TEST_QUESTIONS = [
 ];
 
 // ---- Functions ----
-function getRandomCard() {
-  return BULLY_CARDS[Math.floor(Math.random() * BULLY_CARDS.length)];
+// สุ่มการ์ดแบบไม่ซ้ำ — วนครบทุกใบแล้วค่อยเริ่มรอบใหม่
+const _usedCardIds = {};
+
+function getRandomCard(userId) {
+  const key = userId || 'default';
+
+  // ถ้ายังไม่มี หรือใช้ครบแล้ว → สร้าง pool ใหม่
+  if (!_usedCardIds[key] || _usedCardIds[key].length === 0) {
+    // สับเรียงแบบ Fisher-Yates
+    const pool = BULLY_CARDS.map(c => c.id);
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    _usedCardIds[key] = pool;
+  }
+
+  const nextId = _usedCardIds[key].shift();
+  return BULLY_CARDS.find(c => c.id === nextId) || BULLY_CARDS[0];
 }
 
 function getCardById(id) {
