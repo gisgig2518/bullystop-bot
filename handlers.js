@@ -73,7 +73,7 @@ async function routeText(text, state, userId, replyToken, client) {
     return client.replyMessage(replyToken, msgHowToPlay());
   }
   if (t.includes('การ์ด') || t.includes('สถานการณ์') || t.includes('บูลลี่')) {
-    return client.replyMessage(replyToken, flex.bullyCard(game.getRandomCard()));
+    return client.replyMessage(replyToken, flex.bullyCard(game.getRandomCard(userId)));
   }
   if (t.includes('คะแนน') || t.includes('ผล')) {
     return client.replyMessage(replyToken, msgScore(state.score || 0));
@@ -95,7 +95,7 @@ async function handlePostback(action, value, cardId, state, userId, replyToken, 
     return client.replyMessage(replyToken, [flex.answerResult(result), flex.nextCardPrompt(userState[userId].score)]);
   }
   if (action === 'next_card') {
-    return client.replyMessage(replyToken, flex.bullyCard(game.getRandomCard()));
+    return client.replyMessage(replyToken, flex.bullyCard(game.getRandomCard(userId)));
   }
   if (action === 'start_pretest') {
     userState[userId].pretestAnswers = [];
@@ -114,7 +114,7 @@ async function handlePostback(action, value, cardId, state, userId, replyToken, 
   if (action === 'start_game') {
     return client.replyMessage(replyToken, [
       { type: 'text', text: 'ไปเลย! 🎮 หยุดช่องสีส้มบนกระดานแล้วกด "รับสถานการณ์" ได้เลยนะครับ' },
-      flex.bullyCard(game.getRandomCard()),
+      flex.bullyCard(game.getRandomCard(userId)),
     ]);
   }
   if (action === 'posttest') {
